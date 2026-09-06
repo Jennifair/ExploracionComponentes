@@ -1,5 +1,27 @@
 package com.example.exploracioncomponentes
 
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.ui.window.Dialog
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.Tab
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.rememberTooltipState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
@@ -417,3 +439,197 @@ fun TopAppBarExample() {
 @Preview(showBackground = true)
 @Composable
 fun TopAppBarPreview() { TopAppBarExample() }
+
+
+// 22. Divider (HorizontalDivider): línea delgada que separa visualmente secciones de contenido
+@Composable
+fun DividerExample() {
+    Column {
+        Text("Sección 1")
+        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+        Text("Sección 2")
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun DividerPreview() { DividerExample() }
+
+
+// 23. Dialog: ventana emergente genérica y personalizable (más flexible que AlertDialog)
+@Composable
+fun DialogExample() {
+    var mostrar by remember { mutableStateOf(true) }
+    if (mostrar) {
+        Dialog(onDismissRequest = { mostrar = false }) {
+            Surface(shape = RoundedCornerShape(8.dp)) {
+                Text("Este es un Dialog personalizado", modifier = Modifier.padding(24.dp))
+            }
+        }
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun DialogPreview() { DialogExample() }
+
+
+// 24. DropdownMenu: menú desplegable con una lista de opciones
+@Composable
+fun DropDownMenuExample() {
+    var expandido by remember { mutableStateOf(false) }
+    Box {
+        Button(onClick = { expandido = true }) { Text("Abrir menú") }
+        DropdownMenu(expanded = expandido, onDismissRequest = { expandido = false }) {
+            DropdownMenuItem(text = { Text("Opción 1") }, onClick = { expandido = false })
+            DropdownMenuItem(text = { Text("Opción 2") }, onClick = { expandido = false })
+        }
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun DropDownMenuPreview() { DropDownMenuExample() }
+
+
+// 25. LazyVerticalGrid: cuadrícula que solo dibuja los elementos visibles (versión "oficial" del control de grillas)
+@Composable
+fun LazyVerticalGridExample() {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = Modifier.height(120.dp)
+    ) {
+        items(6) { index ->
+            Card(modifier = Modifier.padding(4.dp)) {
+                Text("Celda $index", modifier = Modifier.padding(12.dp))
+            }
+        }
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun LazyVerticalGridPreview() { LazyVerticalGridExample() }
+
+
+// 26. OutlinedTextField: campo de texto con borde delineado (variante estética de TextField)
+@Composable
+fun OutlinedTextFieldExample() {
+    var texto by remember { mutableStateOf("") }
+    OutlinedTextField(
+        value = texto,
+        onValueChange = { texto = it },
+        label = { Text("Escribe algo") }
+    )
+}
+@Preview(showBackground = true)
+@Composable
+fun OutlinedTextFieldPreview() { OutlinedTextFieldExample() }
+
+
+// 27. Snackbar: mensaje breve y temporal que aparece en la parte inferior de la pantalla
+@Composable
+fun SnackbarExample() {
+    Snackbar { Text("Este es un mensaje Snackbar") }
+}
+@Preview(showBackground = true)
+@Composable
+fun SnackbarPreview() { SnackbarExample() }
+
+
+// 28. TabRow: fila de pestañas para navegar entre secciones
+@Composable
+fun TabRowExample() {
+    var seleccionado by remember { mutableStateOf(0) }
+    val tabs = listOf("Inicio", "Perfil", "Ajustes")
+    TabRow(selectedTabIndex = seleccionado) {
+        tabs.forEachIndexed { index, titulo ->
+            Tab(
+                selected = seleccionado == index,
+                onClick = { seleccionado = index },
+                text = { Text(titulo) }
+            )
+        }
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun TabRowPreview() { TabRowExample() }
+
+
+// 29. BottomNavigation (NavigationBar en Material3): barra de navegación inferior con íconos
+@Composable
+fun BottomNavigationExample() {
+    var seleccionado by remember { mutableStateOf(0) }
+    NavigationBar {
+        NavigationBarItem(
+            selected = seleccionado == 0,
+            onClick = { seleccionado = 0 },
+            icon = { Icon(Icons.Default.Home, contentDescription = "Inicio") },
+            label = { Text("Inicio") }
+        )
+        NavigationBarItem(
+            selected = seleccionado == 1,
+            onClick = { seleccionado = 1 },
+            icon = { Icon(Icons.Default.Person, contentDescription = "Perfil") },
+            label = { Text("Perfil") }
+        )
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun BottomNavigationPreview() { BottomNavigationExample() }
+
+
+// 30. NavigationRail: barra de navegación vertical, usada en pantallas grandes (tablets)
+@Composable
+fun NavigationRailExample() {
+    var seleccionado by remember { mutableStateOf(0) }
+    NavigationRail {
+        NavigationRailItem(
+            selected = seleccionado == 0,
+            onClick = { seleccionado = 0 },
+            icon = { Icon(Icons.Default.Home, contentDescription = "Inicio") },
+            label = { Text("Inicio") }
+        )
+        NavigationRailItem(
+            selected = seleccionado == 1,
+            onClick = { seleccionado = 1 },
+            icon = { Icon(Icons.Default.Person, contentDescription = "Perfil") },
+            label = { Text("Perfil") }
+        )
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun NavigationRailPreview() { NavigationRailExample() }
+
+
+// 31. Tooltip: texto de ayuda que aparece al mantener presionado o pasar el cursor sobre un elemento
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TooltipExample() {
+    TooltipBox(
+        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+        tooltip = { PlainTooltip { Text("Este es un Tooltip") } },
+        state = rememberTooltipState()
+    ) {
+        Icon(Icons.Default.Info, contentDescription = "Info")
+    }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
+@Composable
+fun TooltipPreview() { TooltipExample() }
+
+
+// 32. Pager (HorizontalPager): permite deslizar entre páginas horizontalmente (como un carrusel)
+@Composable
+fun PagerExample() {
+    val pagerState = rememberPagerState(pageCount = { 3 })
+    HorizontalPager(state = pagerState, modifier = Modifier.height(100.dp)) { page ->
+        Box(
+            modifier = Modifier.fillMaxWidth().padding(16.dp).background(Color(0xFFC5E1A5)),
+            contentAlignment = Alignment.Center
+        ) { Text("Página $page") }
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun PagerPreview() { PagerExample() }
