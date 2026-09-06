@@ -1,5 +1,8 @@
 package com.example.exploracioncomponentes
 
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -38,6 +41,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.exploracioncomponentes.ui.theme.ExploracionComponentesTheme
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Switch
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.width
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.painterResource
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -225,3 +244,176 @@ fun FlowColumnExample() {
 @Preview(showBackground = true)
 @Composable
 fun FlowColumnPreview() { FlowColumnExample() }
+
+// 10. AlertDialog: ventana emergente que pide confirmación o muestra un aviso importante
+@Composable
+fun AlertDialogExample() {
+    var mostrar by remember { mutableStateOf(true) }
+    if (mostrar) {
+        AlertDialog(
+            onDismissRequest = { mostrar = false },
+            title = { Text("Confirmar acción") },
+            text = { Text("¿Seguro que deseas continuar?") },
+            confirmButton = {
+                Button(onClick = { mostrar = false }) { Text("Aceptar") }
+            },
+            dismissButton = {
+                Button(onClick = { mostrar = false }) { Text("Cancelar") }
+            }
+        )
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun AlertDialogPreview() { AlertDialogExample() }
+
+
+// 11. Card: contenedor con esquinas redondeadas y elevación, usado para agrupar contenido relacionado
+@Composable
+fun CardExample() {
+    Card(
+        modifier = Modifier.padding(16.dp).size(150.dp)
+    ) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Text("Título de la tarjeta", fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text("Contenido de ejemplo dentro de un Card.")
+        }
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun CardPreview() { CardExample() }
+
+
+// 12. Checkbox: casilla de verificación para opciones booleanas (marcado/desmarcado)
+@Composable
+fun CheckboxExample() {
+    var marcado by remember { mutableStateOf(true) }
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Checkbox(checked = marcado, onCheckedChange = { marcado = it })
+        Text("Acepto los términos")
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun CheckboxPreview() { CheckboxExample() }
+
+
+// 13. FloatingActionButton: botón circular flotante para la acción principal de la pantalla
+@Composable
+fun FloatingActionButtonExample() {
+    FloatingActionButton(onClick = {}) {
+        Icon(Icons.Default.Add, contentDescription = "Agregar")
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun FloatingActionButtonPreview() { FloatingActionButtonExample() }
+
+
+// 14. Icon: muestra un ícono vectorial (de Material Icons u otro recurso)
+@Composable
+fun IconExample() {
+    Icon(
+        imageVector = Icons.Default.Add,
+        contentDescription = "Ícono de agregar",
+        modifier = Modifier.size(48.dp)
+    )
+}
+@Preview(showBackground = true)
+@Composable
+fun IconPreview() { IconExample() }
+
+
+// 15. Image: muestra una imagen (drawable, vectorial o bitmap)
+@Composable
+fun ImageExample() {
+    Image(
+        painter = painterResource(id = R.drawable.ic_launcher_foreground),
+        contentDescription = "Imagen de ejemplo",
+        modifier = Modifier.size(100.dp)
+    )
+}
+@Preview(showBackground = true)
+@Composable
+fun ImagePreview() { ImageExample() }
+
+
+// 16. ProgressBar (CircularProgressIndicator): indica que un proceso está en curso
+@Composable
+fun ProgressBarExample() {
+    CircularProgressIndicator()
+}
+@Preview(showBackground = true)
+@Composable
+fun ProgressBarPreview() { ProgressBarExample() }
+
+
+// 17. RadioButton: permite elegir UNA opción entre varias (mutuamente excluyentes)
+@Composable
+fun RadioButtonExample() {
+    var seleccionado by remember { mutableStateOf(0) }
+    Column {
+        listOf("Opción A", "Opción B").forEachIndexed { index, texto ->
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(
+                    selected = seleccionado == index,
+                    onClick = { seleccionado = index }
+                )
+                Text(texto)
+            }
+        }
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun RadioButtonPreview() { RadioButtonExample() }
+
+
+// 18. Slider: control deslizante para elegir un valor dentro de un rango
+@Composable
+fun SliderExample() {
+    var valor by remember { mutableStateOf(0.5f) }
+    Slider(value = valor, onValueChange = { valor = it })
+}
+@Preview(showBackground = true)
+@Composable
+fun SliderPreview() { SliderExample() }
+
+
+// 19. Spacer: espacio vacío usado para separar elementos visualmente
+@Composable
+fun SpacerExample() {
+    Row {
+        Text("Izquierda")
+        Spacer(modifier = Modifier.width(32.dp))
+        Text("Derecha")
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun SpacerPreview() { SpacerExample() }
+
+
+// 20. Switch: interruptor de encendido/apagado (on/off)
+@Composable
+fun SwitchExample() {
+    var activado by remember { mutableStateOf(true) }
+    Switch(checked = activado, onCheckedChange = { activado = it })
+}
+@Preview(showBackground = true)
+@Composable
+fun SwitchPreview() { SwitchExample() }
+
+
+// 21. TopAppBar: barra superior de la pantalla, usualmente con el título de la app
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBarExample() {
+    TopAppBar(title = { Text("Mi Aplicación") })
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
+@Composable
+fun TopAppBarPreview() { TopAppBarExample() }
